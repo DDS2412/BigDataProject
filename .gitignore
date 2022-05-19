@@ -1,0 +1,7 @@
+# IDE
+.idea/
+
+# Artifacts
+/docker-compose/.env
+
+/docker-compose/logs/
