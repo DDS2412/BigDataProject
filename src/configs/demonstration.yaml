@@ -1,0 +1,14 @@
+get_forms:
+  from_year: 2021
+  to_year:   2022
+  quaters: ## ["QTR1", "QTR2", "QTR3", "QTR4"]
+    - "QTR1"
+    - "QTR2"
+data_path: "/opt/airflow/data/"
+forms_parser:
+  is_existed_only_mapping: "true"
+  file_name: "forms.csv"
+  mapping:   "tickers.csv"
+yahoo_downloader:
+  result_filename: "final_result.json"
+  parsed_forms_filename: "forms.csv"

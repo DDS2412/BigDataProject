@@ -4,4 +4,6 @@
 # Artifacts
 /docker-compose/.env
 
-/docker-compose/logs/
+logs/*
+plugins/*
+data/*

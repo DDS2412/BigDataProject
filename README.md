@@ -4,7 +4,7 @@
 - sh start.sh
 
 ## Запуск сервиса  
-- docker-compose -f local.yaml up
+- docker-compose -f docker-compose.yaml up
 
 ## Обращение к airflow 
 - Перейти по ссылке localhost:8080
