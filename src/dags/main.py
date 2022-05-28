@@ -1,9 +1,11 @@
 from datetime import datetime
 
 import yaml
+import json
 from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.python import PythonOperator
+from airflow.operators.bash_operator import BashOperator
 
 from forms import get_forms
 from forms_parser import parse_with_mapping
@@ -56,4 +58,28 @@ with DAG("dag_main", start_date=datetime(2022, 5, 21), schedule_interval="@daily
         python_callable=get_data_from_yahoo,
     )
 
-    set_config_node >> load_forms_node >> parse_forms_node >> load_yahoo_node
+    config = json.loads(Variable.get("yahoo_downloader").replace("'", '"'))
+
+    parsed_forms_filename = config.get("parsed_forms_filename")
+    result_filename = config.get("result_filename")
+
+    data_path = Variable.get("data_path")
+
+    forms_paths = data_path + parsed_forms_filename
+    result_path = data_path + result_filename
+
+    upload_main_results = BashOperator(
+        task_id='upload_main_results',
+        bash_command=f'cat {result_path} | ssh -T dsergachev-242193@gateway.st "kubectl exec --stdin jupyter-spark-7bf684cf7b-5d9tc -- hdfs dfs -put - /home/dsergachev-242193/stocks.csv"',
+    )
+
+    upload_forms = BashOperator(
+        task_id='upload_forms',
+        bash_command=f'cat {forms_paths} | ssh -T dsergachev-242193@gateway.st "kubectl exec --stdin jupyter-spark-7bf684cf7b-5d9tc -- hdfs dfs -put - /home/dsergachev-242193/forms.csv"',
+    )
+
+    set_config_node >> \
+    load_forms_node >> \
+    parse_forms_node >> \
+    load_yahoo_node >> \
+    [upload_forms, upload_main_results]
