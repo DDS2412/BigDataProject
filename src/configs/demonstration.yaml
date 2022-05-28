@@ -10,5 +10,5 @@ forms_parser:
   file_name: "forms.csv"
   mapping:   "tickers.csv"
 yahoo_downloader:
-  result_filename: "final_result.json"
+  result_filename: "final_result.csv"
   parsed_forms_filename: "forms.csv"

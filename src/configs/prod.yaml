@@ -8,6 +8,9 @@ get_forms:
     - "QTR4"
 data_path: "/opt/airflow/data/"
 forms_parser:
-  is_existed_only_mapping: "False"
+  is_existed_only_mapping: "true"
   file_name: "forms.csv"
-  mapping:   "mapping.csv"
+  mapping:   "tickers.csv"
+yahoo_downloader:
+  result_filename: "final_result.csv"
+  parsed_forms_filename: "forms.csv"
